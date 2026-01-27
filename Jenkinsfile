@@ -29,7 +29,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube') {
                     sh '''
-                      mvn sonar:sonar \
+                      mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
                         -Dsonar.projectKey=mathutils \
                         -Dsonar.projectName=MathUtils \
                         -Dsonar.host.url=http://localhost:9000
@@ -44,6 +44,7 @@ pipeline {
             junit allowEmptyResults: true,
                   testResults: 'target/surefire-reports/*.xml'
         }
+
         success {
             archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
