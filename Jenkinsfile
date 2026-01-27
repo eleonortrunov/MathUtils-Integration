@@ -24,6 +24,19 @@ pipeline {
                 sh 'mvn test'
             }
         }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh '''
+                      mvn sonar:sonar \
+                        -Dsonar.projectKey=mathutils \
+                        -Dsonar.projectName=MathUtils \
+                        -Dsonar.host.url=http://localhost:9000
+                    '''
+                }
+            }
+        }
     }
 
     post {
