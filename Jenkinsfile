@@ -46,11 +46,19 @@ pipeline {
 
         success {
             archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-            emailext(to: '$DEFAULT_RECIPIENTS')
+            emailext(
+                to: '$DEFAULT_RECIPIENTS',
+                subject: '$PROJECT_NAME - Build #$BUILD_NUMBER SUCCESS',
+                body: 'Build succeeded. Details: $BUILD_URL'
+            )
         }
 
         failure {
-            emailext(to: '$DEFAULT_RECIPIENTS')
+            emailext(
+                to: '$DEFAULT_RECIPIENTS',
+                subject: '$PROJECT_NAME - Build #$BUILD_NUMBER FAILED',
+                body: 'Build failed. Check console output: $BUILD_URL'
+            )
         }
     }
 }
