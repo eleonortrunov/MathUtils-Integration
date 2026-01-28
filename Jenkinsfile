@@ -40,16 +40,20 @@ pipeline {
 
     post {
         always {
-            junit allowEmptyResults: true,
-                  testResults: 'target/surefire-reports/*.xml'
+            junit 'target/surefire-reports/*.xml'
+
+            publishCoverage adapters: [
+                jacocoAdapter('target/site/jacoco/jacoco.xml')
+            ]
+
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
 
         success {
-            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             emailext(
                 to: '$DEFAULT_RECIPIENTS',
                 subject: '$PROJECT_NAME - Build #$BUILD_NUMBER SUCCESS',
-                body: 'Build succeeded. Details: $BUILD_URL'
+                body: 'Build successful. Details: $BUILD_URL'
             )
         }
 
