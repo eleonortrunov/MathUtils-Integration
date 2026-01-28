@@ -40,11 +40,12 @@ pipeline {
 
     post {
         always {
-            junit 'target/surefire-reports/*.xml'
-            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            junit allowEmptyResults: true,
+                  testResults: 'target/surefire-reports/*.xml'
         }
 
         success {
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             emailext(
                 to: '$DEFAULT_RECIPIENTS',
                 subject: '$PROJECT_NAME - Build #$BUILD_NUMBER SUCCESS',
